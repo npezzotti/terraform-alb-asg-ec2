@@ -1,4 +1,5 @@
 # terraform-alb-asg-ec2
+This deploys the architecture in this tutorial using Terraform: https://docs.aws.amazon.com/autoscaling/ec2/userguide/tutorial-ec2-auto-scaling-load-balancer.html
 
 ## Directions
 Create SSH key:
