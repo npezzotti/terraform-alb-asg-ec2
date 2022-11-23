@@ -27,5 +27,5 @@ open $(terraform output -raw application_url)
 ## Access instances
 Choose the public IP from one of the instance displayed on the webpage and ssh as ec2-user`:
 ```
-ssh -i .ssh/my-key ec2-user@<PUBLIC_DNS_OR_IP>
+ssh -i .ssh/tf-alb-asg-ec2-dev-key ec2-user@<PUBLIC_DNS_OR_IP>
 ```
