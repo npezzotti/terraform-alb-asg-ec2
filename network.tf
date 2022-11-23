@@ -58,65 +58,69 @@ resource "aws_route_table_association" "public" {
 resource "aws_security_group" "lb" {
   vpc_id = aws_vpc.main.id
 
-  ingress {
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-    description      = "Allow HTTP"
-    from_port        = 80
-    protocol         = "tcp"
-    to_port          = 80
-  }
-
-  egress {
-    description     = "Allow HTTP from instance"
-    security_groups = [aws_security_group.instance.id]
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
-  }
-
   tags = {
     "Name" = "${local.name_prefix}-lb-sg"
   }
 }
 
+resource "aws_security_group_rule" "lb_allow_all_http_ingress" {
+  security_group_id = aws_security_group.lb.id
+  description       = "Allow HTTP"
+  type              = "ingress"
+  cidr_blocks       = ["0.0.0.0/0"]
+  ipv6_cidr_blocks  = ["::/0"]
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+}
+
+resource "aws_security_group_rule" "lb_allow_http_egress" {
+  security_group_id = aws_security_group.lb.id
+  description       = "Allow HTTP egress"
+  type              = "egress"
+  cidr_blocks       = ["0.0.0.0/0"]
+  ipv6_cidr_blocks  = ["::/0"]
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+}
+
 resource "aws_security_group" "instance" {
   vpc_id = aws_vpc.main.id
-
-  ingress {
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = "Allow SSH"
-    from_port        = 22
-    ipv6_cidr_blocks = ["::/0"]
-    protocol         = "tcp"
-    to_port          = 22
-  }
-
-  egress {
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = "Allow All Egress"
-    from_port        = 0
-    ipv6_cidr_blocks = ["::/0"]
-    protocol         = "-1"
-    to_port          = 0
-  }
 
   tags = {
     "Name" = "${local.name_prefix}-instance-sg"
   }
 }
 
-resource "aws_security_group_rule" "instance" {
+resource "aws_security_group_rule" "instance_allow_lb_http_ingress" {
   security_group_id        = aws_security_group.instance.id
-  type                     = "ingress"
   description              = "Allow HTTP"
+  type                     = "ingress"
+  source_security_group_id = aws_security_group.lb.id
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  source_security_group_id = aws_security_group.lb.id
+}
 
-  depends_on = [
-    aws_security_group.instance,
-    aws_security_group.lb
-  ]
+resource "aws_security_group_rule" "instance_allow_all_egress" {
+  security_group_id = aws_security_group.instance.id
+  description       = "Allow All Egress"
+  type              = "egress"
+  cidr_blocks       = ["0.0.0.0/0"]
+  ipv6_cidr_blocks  = ["::/0"]
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+}
+
+resource "aws_security_group_rule" "instance_allow_all_ssh_ingress" {
+  security_group_id = aws_security_group.instance.id
+  description       = "Allow SSH"
+  type              = "ingress"
+  cidr_blocks       = ["0.0.0.0/0"]
+  ipv6_cidr_blocks  = ["::/0"]
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
 }
