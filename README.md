@@ -30,7 +30,7 @@ Open the application url in browser:
 open $(terraform output -raw application_url)
 ```
 ## Access instances
-Choose the public IP from one of the instance displayed on the webpage and ssh as ec2-user`:
+Choose one of the public DNS names printed by the `local-exec` provisioner and ssh as `ec2-user` using created private key`:
 ```
 ssh -i .ssh/tf-alb-asg-ec2-dev-key ec2-user@<PUBLIC_DNS_OR_IP>
 ```
