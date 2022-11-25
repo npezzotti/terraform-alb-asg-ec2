@@ -68,4 +68,8 @@ resource "aws_autoscaling_group" "main" {
   instance_refresh {
     strategy = "Rolling"
   }
+
+  provisioner "local-exec" {
+    command = "./scripts/get_instance_dns.sh"
+  }
 }
