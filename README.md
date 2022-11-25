@@ -1,5 +1,5 @@
-# terraform-alb-asg-ec2
-This deploys the architecture in this tutorial using Terraform: https://docs.aws.amazon.com/autoscaling/ec2/userguide/tutorial-ec2-auto-scaling-load-balancer.html
+# terraform-alb-asg-nginx
+This project deploys Nginx on Amazon Linux 2022 instances within a load-balanced autoscaling group, similar to the architecture shown in [this AWS tutorial](https://docs.aws.amazon.com/autoscaling/ec2/userguide/tutorial-ec2-auto-scaling-load-balancer.html) using Terraform.
 
 ## Prerequisites
 1. [Terraform installed](https://developer.hashicorp.com/terraform/downloads)
