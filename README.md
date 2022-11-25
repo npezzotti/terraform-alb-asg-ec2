@@ -1,5 +1,9 @@
 # terraform-alb-asg-ec2
 
+## Prerequisites
+1. [Terraform installed](https://developer.hashicorp.com/terraform/downloads)
+2. [AWS credentials configured](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#authentication-and-configuration)
+
 ## Directions
 Create SSH key:
 ```
